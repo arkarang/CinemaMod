@@ -1,5 +1,6 @@
 package com.cinemamod.fabric.gui;
 
+import com.cinemamod.fabric.CinemaMod;
 import com.cinemamod.fabric.CinemaModClient;
 import com.cinemamod.fabric.gui.widget.VideoHistoryListWidget;
 import com.cinemamod.fabric.gui.widget.VideoListWidget;
@@ -15,7 +16,7 @@ import java.util.Locale;
 
 public class VideoHistoryScreen extends Screen {
 
-    protected static final Identifier TEXTURE = new Identifier("textures/gui/social_interactions.png");
+    protected static final Identifier TEXTURE = new Identifier(CinemaMod.MODID, "textures/gui/menuui_trans.png");
     protected static final Text SEARCH_TEXT = Text.translatable("gui.socialInteractions.search_hint").formatted(Formatting.ITALIC).formatted(Formatting.GRAY);
 
     private TextFieldWidget searchBox;
@@ -23,7 +24,7 @@ public class VideoHistoryScreen extends Screen {
     private String currentSearch = "";
 
     public VideoHistoryScreen() {
-        super(Text.of("Video History"));
+        super(Text.of("영상 기록"));
     }
 
     @Override
@@ -44,12 +45,12 @@ public class VideoHistoryScreen extends Screen {
     @Override
     public void tick() {
         super.tick();
-        this.searchBox.tick();
+//        this.searchBox.tick();
     }
 
-    public void renderBackground(DrawContext context) {
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
         int i = this.method_31362() + 3;
-        super.renderBackground(context);
+        super.renderBackground(context, mouseX, mouseY, delta);
         context.drawTexture(TEXTURE, i, 64, 1, 1, 236, 8);
         int j = this.method_31360();
         for (int k = 0; k < j; ++k)
@@ -60,7 +61,7 @@ public class VideoHistoryScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
+        this.renderBackground(context, mouseX, mouseY, delta);
         videoListWidget.render(context, mouseX, mouseY, delta);
         if (!this.searchBox.isFocused() && this.searchBox.getText().isEmpty()) {
             context.drawTextWithShadow(this.client.textRenderer, SEARCH_TEXT, this.searchBox.getX(), this.searchBox.getY(), -1);
@@ -114,9 +115,9 @@ public class VideoHistoryScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        videoListWidget.mouseScrolled(mouseX, mouseY, amount);
-        return super.mouseScrolled(mouseX, mouseY, amount);
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        videoListWidget.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
 }

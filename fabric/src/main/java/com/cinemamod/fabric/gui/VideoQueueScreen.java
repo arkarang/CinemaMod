@@ -1,5 +1,6 @@
 package com.cinemamod.fabric.gui;
 
+import com.cinemamod.fabric.CinemaMod;
 import com.cinemamod.fabric.CinemaModClient;
 import com.cinemamod.fabric.gui.widget.VideoQueueWidget;
 import com.cinemamod.fabric.util.NetworkUtil;
@@ -17,19 +18,19 @@ import org.lwjgl.glfw.GLFW;
 
 public class VideoQueueScreen extends Screen {
 
-    protected static final Identifier TEXTURE = new Identifier("textures/gui/social_interactions.png");
+    protected static final Identifier TEXTURE = new Identifier(CinemaMod.MODID, "textures/gui/menuui_trans.png");
     protected static KeyBinding keyBinding;
 
     public VideoQueueWidget videoQueueWidget;
 
     public VideoQueueScreen() {
-        super(Text.of("Video Queue"));
+        super(Text.of("영상 대기열"));
     }
 
     @Override
     protected void init() {
         videoQueueWidget = new VideoQueueWidget(this, client, this.width, this.height, 68, this.method_31361(), 19);
-        ButtonWidget.Builder videoSettingsBuilder = new Builder(Text.of("Video Settings"), button -> {
+        ButtonWidget.Builder videoSettingsBuilder = new Builder(Text.of("비디오 설정"), button -> {
             client.setScreen(new VideoSettingsScreen());
         });
 
@@ -54,27 +55,27 @@ public class VideoQueueScreen extends Screen {
         return (this.width - 238) / 2;
     }
 
-    public void renderBackground(DrawContext context) {
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
         int i = this.method_31362() + 3;
-        super.renderBackground(context);
+        super.renderBackground(context, mouseX, mouseY, delta);
         context.drawTexture(TEXTURE, i, 64, 1, 1, 236, 8);
         int j = this.method_31360();
         for (int k = 0; k < j; ++k)
             context.drawTexture(TEXTURE, i, 72 + 16 * k, 1, 10, 236, 16);
         context.drawTexture(TEXTURE, i, 72 + 16 * j, 1, 27, 236, 8);
-        context.drawCenteredTextWithShadow(this.client.textRenderer, Text.of("Video Queue - " + videoQueueWidget.children().size() + " entries"), this.width / 2, 64 - 10, -1);
+        context.drawCenteredTextWithShadow(this.client.textRenderer, Text.of("영상 대기열 - " + videoQueueWidget.children().size() + " 개"), this.width / 2, 64 - 10, -1);
         if (videoQueueWidget.children().isEmpty()) {
-            context.drawCenteredTextWithShadow(this.client.textRenderer, Text.of("No videos queued"), this.width / 2, (56 + this.method_31361()) / 2, -1);
+            context.drawCenteredTextWithShadow(this.client.textRenderer, Text.of("대기열이 비었습니다"), this.width / 2, (56 + this.method_31361()) / 2, -1);
         } else {
             if (videoQueueWidget.getScrollAmount() == 0f) {
-                context.drawCenteredTextWithShadow(this.client.textRenderer, Text.of("UP NEXT ->"), -158 + this.width / 2, 64 + 12, -1);
+                context.drawCenteredTextWithShadow(this.client.textRenderer, Text.of("다음 영상 ->"), -158 + this.width / 2, 64 + 12, -1);
             }
         }
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
+        this.renderBackground(context, mouseX, mouseY, delta);
         videoQueueWidget.render(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
     }
@@ -99,9 +100,9 @@ public class VideoQueueScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        videoQueueWidget.mouseScrolled(mouseX, mouseY, amount);
-        return super.mouseScrolled(mouseX, mouseY, amount);
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        videoQueueWidget.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
     public static void registerKeyInput() {

@@ -1,5 +1,6 @@
 package com.cinemamod.fabric.gui;
 
+import com.cinemamod.fabric.CinemaMod;
 import com.cinemamod.fabric.CinemaModClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -12,16 +13,16 @@ import net.minecraft.util.Identifier;
 
 public class VideoSettingsScreen extends Screen {
 
-    protected static final Identifier TEXTURE = new Identifier("textures/gui/social_interactions.png");
+    protected static final Identifier TEXTURE = new Identifier(CinemaMod.MODID, "textures/gui/menuui.png");
     private boolean shouldReloadScreen;
 
     public VideoSettingsScreen() {
-        super(Text.of("Video Settings"));
+        super(Text.of("비디오 설정"));
     }
 
     @Override
     protected void init() {
-        addDrawableChild(new SliderWidget(method_31362() + 23, 78, 196, 20, Text.of("Volume"),
+        addDrawableChild(new SliderWidget(method_31362() + 23, 78, 196, 20, Text.of("음량"),
                 CinemaModClient.getInstance().getVideoSettings().getVolume()) {
             @Override
             protected void updateMessage() {
@@ -34,7 +35,7 @@ public class VideoSettingsScreen extends Screen {
                 CinemaModClient.getInstance().getVideoSettings().setVolume((float) value);
             }
         });
-        addDrawableChild(new CheckboxWidget(method_31362() + 23, 110, 196, 20, Text.of("Mute video while alt-tabbed"),
+        addDrawableChild(new CheckboxWidget(method_31362() + 23, 110, 196, 20, Text.of("창이 포커싱 중이 아닐 때 음소거"),
                 CinemaModClient.getInstance().getVideoSettings().isMuteWhenAltTabbed()) {
             @Override
             public void onPress() {
@@ -42,7 +43,7 @@ public class VideoSettingsScreen extends Screen {
                 CinemaModClient.getInstance().getVideoSettings().setMuteWhenAltTabbed(isChecked());
             }
         });
-        addDrawableChild(new CheckboxWidget(method_31362() + 23, 142, 196, 20, Text.of("Hide crosshair while video playing"),
+        addDrawableChild(new CheckboxWidget(method_31362() + 23, 142, 196, 20, Text.of("영상이 재생중일 때 십자선 숨기기"),
                 CinemaModClient.getInstance().getVideoSettings().isHideCrosshair()) {
             @Override
             public void onPress() {
@@ -51,21 +52,21 @@ public class VideoSettingsScreen extends Screen {
             }
         });
         ButtonWidget.Builder screenResolutionBuilder = new Builder(
-            Text.of("Screen resolution: " + CinemaModClient.getInstance().getVideoSettings().getBrowserResolution() + "p"),
+            Text.of("화면 해상도: " + CinemaModClient.getInstance().getVideoSettings().getBrowserResolution() + "p"),
              button ->
         {
             CinemaModClient.getInstance().getVideoSettings().setNextBrowserResolution();
-            button.setMessage(Text.of("Screen resolution: " + CinemaModClient.getInstance().getVideoSettings().getBrowserResolution() + "p"));
+            button.setMessage(Text.of("화면 해상도: " + CinemaModClient.getInstance().getVideoSettings().getBrowserResolution() + "p"));
             shouldReloadScreen = true;
         });
         screenResolutionBuilder.dimensions(method_31362() + 23, 142 + 32, 196, 20);
         addDrawableChild(screenResolutionBuilder.build());
         ButtonWidget.Builder browserRefreshRateBuilder = new Builder(
-                Text.of("Screen refresh rate: " + CinemaModClient.getInstance().getVideoSettings().getBrowserRefreshRate() + " fps"),
+                Text.of("화면 갱신 주기: " + CinemaModClient.getInstance().getVideoSettings().getBrowserRefreshRate() + " fps"),
                 button ->
                 {
                     CinemaModClient.getInstance().getVideoSettings().setNextBrowserRefreshRate();
-                    button.setMessage(Text.of("Screen refresh rate: " + CinemaModClient.getInstance().getVideoSettings().getBrowserRefreshRate() + " fps"));
+                    button.setMessage(Text.of("화면 갱신 주기: " + CinemaModClient.getInstance().getVideoSettings().getBrowserRefreshRate() + " fps"));
                     shouldReloadScreen = true;
                 });
         browserRefreshRateBuilder.dimensions(method_31362() + 23, 142 + 32 + 32, 196, 20);
@@ -84,9 +85,9 @@ public class VideoSettingsScreen extends Screen {
         return (this.width - 238) / 2;
     }
 
-    public void renderBackground(DrawContext context) {
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
         int i = this.method_31362() + 3;
-        super.renderBackground(context);
+        super.renderBackground(context, mouseX, mouseY, delta);
         context.drawTexture(TEXTURE, i, 64, 1, 1, 236, 8);
         int j = this.method_31360();
         for (int k = 0; k < j; ++k)
@@ -96,8 +97,8 @@ public class VideoSettingsScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
-        context.drawCenteredTextWithShadow(this.client.textRenderer, Text.of("Video Settings"), this.width / 2, 64 - 10, -1);
+        this.renderBackground(context, mouseX, mouseY, delta);
+        context.drawCenteredTextWithShadow(this.client.textRenderer, Text.of("비디오 설정"), this.width / 2, 64 - 10, -1);
         super.render(context, mouseX, mouseY, delta);
     }
 

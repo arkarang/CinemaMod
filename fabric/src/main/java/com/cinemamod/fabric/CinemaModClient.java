@@ -9,7 +9,6 @@ import com.cinemamod.fabric.block.render.ScreenBlockEntityRenderer;
 import com.cinemamod.fabric.cef.CefUtil;
 import com.cinemamod.fabric.cef.Platform;
 import com.cinemamod.fabric.gui.VideoQueueScreen;
-import com.cinemamod.fabric.gui.VideoRequestBrowser;
 import com.cinemamod.fabric.screen.PreviewScreenManager;
 import com.cinemamod.fabric.screen.ScreenManager;
 import com.cinemamod.fabric.service.VideoServiceManager;
@@ -109,7 +108,6 @@ public class CinemaModClient implements ClientModInitializer {
         new WindowFocusMuteThread().start();
 
         VideoQueueScreen.registerKeyInput();
-        VideoRequestBrowser.registerKeyInput();
     }
 
 }

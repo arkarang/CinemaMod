@@ -20,7 +20,7 @@ public abstract class VideoListWidget extends ElementListWidget<VideoListWidgetE
         super(client, width, height, top, bottom, itemHeight);
         this.videoList = videoList;
         setRenderBackground(false);
-        setRenderHorizontalShadows(false);
+//        setRenderHorizontalShadows(false);
         update();
     }
 

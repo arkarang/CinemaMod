@@ -19,7 +19,7 @@ public class VideoQueueWidget extends ElementListWidget<VideoQueueWidgetEntry> {
         super(client, width, height, top, bottom, itemHeight);
         this.parent = parent;
         setRenderBackground(false);
-        setRenderHorizontalShadows(false);
+//        setRenderHorizontalShadows(false);
         update();
     }
 
