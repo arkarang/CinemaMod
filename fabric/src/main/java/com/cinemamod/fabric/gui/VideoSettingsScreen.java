@@ -2,6 +2,7 @@ package com.cinemamod.fabric.gui;
 
 import com.cinemamod.fabric.CinemaMod;
 import com.cinemamod.fabric.CinemaModClient;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -20,6 +21,18 @@ public class VideoSettingsScreen extends Screen {
         super(Text.of("비디오 설정"));
     }
 
+
+    private static CheckboxWidget checkboxWidget(int x, int y, int width, int height, Text text, boolean checked, CheckboxWidget.Callback callback) {
+        CheckboxWidget widget = CheckboxWidget.builder(text, MinecraftClient.getInstance().textRenderer)
+                .pos(x, y)
+                .checked(checked)
+                .callback(callback)
+                .build();
+        widget.setWidth(width);
+        widget.setHeight(height);
+        return widget;
+    }
+
     @Override
     protected void init() {
         addDrawableChild(new SliderWidget(method_31362() + 23, 78, 196, 20, Text.of("음량"),
@@ -35,22 +48,15 @@ public class VideoSettingsScreen extends Screen {
                 CinemaModClient.getInstance().getVideoSettings().setVolume((float) value);
             }
         });
-        addDrawableChild(new CheckboxWidget(method_31362() + 23, 110, 196, 20, Text.of("창이 포커싱 중이 아닐 때 음소거"),
-                CinemaModClient.getInstance().getVideoSettings().isMuteWhenAltTabbed()) {
-            @Override
-            public void onPress() {
-                super.onPress();
-                CinemaModClient.getInstance().getVideoSettings().setMuteWhenAltTabbed(isChecked());
-            }
-        });
-        addDrawableChild(new CheckboxWidget(method_31362() + 23, 142, 196, 20, Text.of("영상이 재생중일 때 십자선 숨기기"),
-                CinemaModClient.getInstance().getVideoSettings().isHideCrosshair()) {
-            @Override
-            public void onPress() {
-                super.onPress();
-                CinemaModClient.getInstance().getVideoSettings().setHideCrosshair(isChecked());
-            }
-        });
+
+        addDrawableChild(checkboxWidget(method_31362() + 23, 110, 196, 20, Text.of("창이 포커싱 중이 아닐 때 음소거"),
+                CinemaModClient.getInstance().getVideoSettings().isMuteWhenAltTabbed(),
+                (checkbox, checked) -> CinemaModClient.getInstance().getVideoSettings().setMuteWhenAltTabbed(checked)
+        ));
+        addDrawableChild(checkboxWidget(method_31362() + 23, 142, 196, 20, Text.of("영상이 재생중일 때 십자선 숨기기"),
+                CinemaModClient.getInstance().getVideoSettings().isHideCrosshair(),
+                (checkbox, checked) -> CinemaModClient.getInstance().getVideoSettings().setHideCrosshair(checked)
+        ));
         ButtonWidget.Builder screenResolutionBuilder = new Builder(
             Text.of("화면 해상도: " + CinemaModClient.getInstance().getVideoSettings().getBrowserResolution() + "p"),
              button ->

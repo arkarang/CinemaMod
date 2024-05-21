@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class CrossHairMixin {
 
     @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
-    public void renderCrosshair(DrawContext context, CallbackInfo ci) {
+    public void renderCrosshair(DrawContext context, float tickDelta, CallbackInfo ci) {
         if (CinemaModClient.getInstance().getScreenManager().hasActiveScreen()
                 && CinemaModClient.getInstance().getVideoSettings().isHideCrosshair()) {
             ci.cancel();
