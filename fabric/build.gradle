@@ -1,8 +1,9 @@
 import net.fabricmc.loom.task.RemapJarTask
 
 plugins {
-	id "de.undercouch.download" version "5.4.0" // Used for downloading JCEF binaries
-	id 'fabric-loom' version '1.6.9'
+	id 'java'
+	id 'fabric-loom' version '1.6-SNAPSHOT'
+	id 'com.github.johnrengelman.shadow' version '7.1.2'
 	id 'maven-publish'
 }
 
@@ -39,6 +40,19 @@ jar {
 	}
 }
 
+shadowJar {
+	configurations = [project.configurations.shadow]
+}
+
+remapJar {
+	// wait until the shadowJar is done
+	dependsOn(shadowJar)
+	mustRunAfter(shadowJar)
+	// Set the input jar for the task. Here use the shadow Jar that include the .class of the transitive dependency
+	inputFile = file(shadowJar.archivePath)
+}
+
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -52,6 +66,8 @@ dependencies {
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
+	implementation 'me.friwi:jcefmaven:122.1.10'
+	shadow 'me.friwi:jcefmaven:122.1.10'
 
 	implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
 	implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
@@ -66,11 +82,11 @@ processResources {
 	}
 }
 
+/*
 sourceSets {
 	jcef {
 		java {
 			srcDir "java-cef/java"
-			exclude "**/tests/**"
 		}
 	}
 
@@ -79,10 +95,11 @@ sourceSets {
 		runtimeClasspath += jcef.output
 	}
 }
+ */
 
 idea {
 	module {
-		excludeDirs += file("java-cef/java/tests")
+		//excludeDirs += file("java-cef/java/tests")
 		inheritOutputDirs true
 	}
 }
@@ -113,7 +130,7 @@ tasks.register('downloadJcef') {
 				}
 			}
 		} catch (Exception e) {
-			println("Skipping CEF libraries for $cef_branch/$platform")
+			//println("Skipping CEF libraries for $cef_branch/$platform")
 			println(e.getMessage())
 		}
 	}

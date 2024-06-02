@@ -23,7 +23,7 @@ public class CefRenderMixin {
     public void render(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         if ((startTime - lastRenderTime) > RENDER_DELTA_NS) {
             if (!CefUtil.isInit()) return;
-            CefUtil.getCefApp().N_DoMessageLoopWork();
+            CefUtil.getCefApp().doMessageLoopWork(0);
             lastRenderTime = startTime;
         }
         if ((startTime - lastCheckSettingsTime) > CHECK_SETTINGS_DELTA_NS) {

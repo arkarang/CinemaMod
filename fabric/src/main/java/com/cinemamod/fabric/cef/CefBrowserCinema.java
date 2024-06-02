@@ -1,31 +1,31 @@
 package com.cinemamod.fabric.cef;
-
 import net.minecraft.client.MinecraftClient;
 import org.cef.CefClient;
 import org.cef.browser.CefBrowser;
-import org.cef.browser.CefBrowserOsr;
+import org.cef.browser.CefBrowserFactory;
 import org.cef.browser.CefRequestContext;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 import java.nio.ByteBuffer;
 
-public class CefBrowserCinema extends CefBrowserOsr {
-
+public class CefBrowserCinema {
+    private final CefBrowser cefBrowser;
     public final CefBrowserCinemaRenderer renderer = new CefBrowserCinemaRenderer(true);
 
     public CefBrowserCinema(CefClient client, String url, boolean transparent, CefRequestContext context) {
-        super(client, url, transparent, context);
+        cefBrowser = CefBrowserFactory.create(client, url, true, transparent, context, null);
         MinecraftClient.getInstance().submit(renderer::initialize);
     }
 
-    @Override
-    public void onPaint(CefBrowser browser, boolean popup, Rectangle[] dirtyRects, ByteBuffer buffer, int width, int height) {
+    public int getIdentifier() {
+        return cefBrowser.getIdentifier();
+    }
+
+    public void onPaint(boolean popup, Rectangle[] dirtyRects, ByteBuffer buffer, int width, int height) {
         renderer.onPaint(buffer, width, height);
     }
 
+    /*
     public void sendKeyPress(int keyCode, int modifiers, long scanCode) {
         CefBrowserCinemaKeyEvent keyEvent = new CefBrowserCinemaKeyEvent(dummyComponent,
                 KeyEvent.KEY_PRESSED,
@@ -34,7 +34,7 @@ public class CefBrowserCinema extends CefBrowserOsr {
                 keyCode,
                 KeyEvent.CHAR_UNDEFINED,
                 scanCode);
-        sendKeyEvent(keyEvent);
+        cefBrowser.sendKeyEvent(keyEvent);
     }
 
     public void sendKeyRelease(int keyCode, int modifiers, long scanCode) {
@@ -45,7 +45,7 @@ public class CefBrowserCinema extends CefBrowserOsr {
                 keyCode,
                 KeyEvent.CHAR_UNDEFINED,
                 scanCode);
-        sendKeyEvent(keyEvent);
+        cefBrowser.sendKeyEvent(keyEvent);
     }
 
     public void sendKeyTyped(char c, int modifiers) {
@@ -55,7 +55,7 @@ public class CefBrowserCinema extends CefBrowserOsr {
                 modifiers,
                 KeyEvent.VK_UNDEFINED,
                 c);
-        sendKeyEvent(keyEvent);
+        cefBrowser.sendKeyEvent(keyEvent);
     }
 
     public void sendMouseMove(int mouseX, int mouseY) {
@@ -67,7 +67,7 @@ public class CefBrowserCinema extends CefBrowserOsr {
                 mouseY,
                 0,
                 false);
-        sendMouseEvent(mouseEvent);
+        cefBrowser.sendMouseEvent(mouseEvent);
     }
 
     public void sendMousePress(int mouseX, int mouseY, int button) {
@@ -80,7 +80,7 @@ public class CefBrowserCinema extends CefBrowserOsr {
                 1,
                 false,
                 button + 1);
-        sendMouseEvent(mouseEvent);
+        cefBrowser.sendMouseEvent(mouseEvent);
     }
 
     public void sendMouseRelease(int mouseX, int mouseY, int button) {
@@ -93,7 +93,7 @@ public class CefBrowserCinema extends CefBrowserOsr {
                 1,
                 false,
                 button + 1);
-        sendMouseEvent(mouseEvent);
+        cefBrowser.sendMouseEvent(mouseEvent);
 
         mouseEvent = new MouseEvent(dummyComponent,
                 MouseEvent.MOUSE_CLICKED,
@@ -104,7 +104,7 @@ public class CefBrowserCinema extends CefBrowserOsr {
                 1,
                 false,
                 button + 1);
-        sendMouseEvent(mouseEvent);
+        cefBrowser.sendMouseEvent(mouseEvent);
     }
 
     public void sendMouseWheel(int mouseX, int mouseY, int mods, int amount, int rotation) {
@@ -119,17 +119,37 @@ public class CefBrowserCinema extends CefBrowserOsr {
                 MouseWheelEvent.WHEEL_UNIT_SCROLL,
                 amount,
                 rotation);
-        sendMouseWheelEvent(mouseWheelEvent);
+        cefBrowser.sendMouseWheelEvent(mouseWheelEvent);
     }
 
+     */
+
     public void resize(int width, int height) {
-        browser_rect_.setBounds(0, 0, width, height);
-        wasResized(width, height);
+        cefBrowser.getUIComponent().setSize(width, height);
+    }
+
+    public void createImmediately() {
+        if(cefBrowser != null) {
+            cefBrowser.createImmediately();
+        }
+    }
+
+    public void setCloseAllowed() {
+        if(cefBrowser != null) {
+            cefBrowser.setCloseAllowed();
+        }
+    }
+    // browser.getMainFrame().executeJavaScript(startJs, browser.getURL(), 0);
+    public void executeJavaScript(String js, String url, int line) {
+        cefBrowser.executeJavaScript(js, url, line);
+    }
+
+    public String currentURL() {
+        return cefBrowser.getURL();
     }
 
     public void close() {
         renderer.cleanup();
-        super.close(true);
+        cefBrowser.close(true);
     }
-
 }

@@ -103,23 +103,37 @@ public class CefInitMixin {
     private static void cefInit(CallbackInfo info) {
         Platform platform = Platform.getPlatform();
 
+        /*
         try {
             setupLibraryPath(platform);
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
 
+         */
+
+        /*
         // TODO: Move to org.cef.CefApp
         if (platform.isLinux()) {
             System.loadLibrary("jawt");
         }
 
-        if (platform.isLinux() || platform.isWindows()) {
-            if (CefUtil.init()) {
+         */
+        File cinemaModLibrariesDir = new File("mods/cinemamod-libraries");
+        if (!cinemaModLibrariesDir.exists()) {
+            cinemaModLibrariesDir.mkdirs();
+        }
+
+        try {
+            //if (platform.isLinux() || platform.isWindows()) {
+            if (CefUtil.init(cinemaModLibrariesDir)) {
                 CinemaMod.LOGGER.info("Chromium Embedded Framework initialized");
             } else {
                 CinemaMod.LOGGER.warning("Could not initialize Chromium Embedded Framework");
             }
+            //}
+        }catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

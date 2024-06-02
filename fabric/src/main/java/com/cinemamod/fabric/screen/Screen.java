@@ -139,7 +139,8 @@ public class Screen {
                 js = String.format(js, volume);
             }
 
-            browser.getMainFrame().executeJavaScript(js, browser.getURL(), 0);
+            //browser.getMainFrame().executeJavaScript(js, browser.getURL(), 0);
+            browser.executeJavaScript(js, browser.currentURL(), 0);
         }
     }
 
@@ -153,7 +154,8 @@ public class Screen {
                 startJs = String.format(startJs, video.getVideoInfo().getId());
             }
 
-            browser.getMainFrame().executeJavaScript(startJs, browser.getURL(), 0);
+            //browser.getMainFrame().executeJavaScript(startJs, browser.getURL(), 0);
+            browser.executeJavaScript(startJs, browser.currentURL(), 0);
 
             // Seek to current time
             if (!video.getVideoInfo().isLivestream()) {
@@ -166,7 +168,8 @@ public class Screen {
                         seekJs = String.format(seekJs, secondsSinceStart);
                     }
 
-                    browser.getMainFrame().executeJavaScript(seekJs, browser.getURL(), 0);
+                    //browser.getMainFrame().executeJavaScript(seekJs, browser.getURL(), 0);
+                    browser.executeJavaScript(seekJs, browser.currentURL(), 0);
                 }
             }
         }

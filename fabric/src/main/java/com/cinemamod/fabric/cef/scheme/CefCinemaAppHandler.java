@@ -1,6 +1,7 @@
 package com.cinemamod.fabric.cef.scheme;
 
 import com.cinemamod.fabric.CinemaMod;
+import me.friwi.jcefmaven.MavenCefAppHandlerAdapter;
 import org.cef.CefApp;
 import org.cef.browser.CefBrowser;
 import org.cef.browser.CefFrame;
@@ -10,10 +11,10 @@ import org.cef.handler.CefAppHandlerAdapter;
 import org.cef.handler.CefResourceHandler;
 import org.cef.network.CefRequest;
 
-public class CefCinemaAppHandler extends CefAppHandlerAdapter {
+public class CefCinemaAppHandler extends MavenCefAppHandlerAdapter {
 
-    public CefCinemaAppHandler(String[] args) {
-        super(args);
+    public CefCinemaAppHandler() {
+        System.out.println("CefCinemaAppHandler created");
     }
 
     @Override
